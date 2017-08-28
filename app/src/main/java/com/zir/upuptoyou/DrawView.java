@@ -51,16 +51,16 @@ public class DrawView extends View {
 
     Paint paint_text;
 
-    Bitmap watermark_bitmap;
-    Rect watermark_dst;
+    protected Bitmap watermark_bitmap;
+    protected Rect watermark_dst;
 
-    Bitmap person;
-    Rect person_dst;
-    String words;
+    protected Bitmap person;
+    protected Rect person_dst;
+    protected String words;
 
-    Matrix matrix_text;
-    float r_x;
-    float r_y;
+    protected Matrix matrix_text;
+    protected float r_x;
+    protected float r_y;
 
     Typeface fontEn;
     Typeface fontZh;
@@ -113,7 +113,7 @@ public class DrawView extends View {
         for (int i = 0; i < words.length(); i++)
             if (words.charAt(i) != '\n') {
                 //load image
-                //Todo: trade ram for speed by loading all bitmaps in constructor?
+                //TODO: trade ram for speed by loading all bitmaps in constructor?
                 int id = 1 + (int) (Math.random() * 25);
                 //Log.d("Drawpeople","id:"+Integer.toString(id));
                 int resId;
@@ -184,7 +184,7 @@ public class DrawView extends View {
 
 
     //redraw all people
-    //// TODO: refine drawing process: not all people at the same time
+    //TODO: refine drawing process: not all people at the same time
     public void drawPeople(String words) {
         this.words = words;
         invalidate();

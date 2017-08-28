@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected DrawView drawView;
     protected EditText editText;
+    protected Button reload_btn;
+    protected Button clear_btn;
     protected Button color1_btn;
     protected Button color2_btn;
     protected Button color3_btn;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawView = (DrawView) findViewById(R.id.drawView);
         editText = (EditText) findViewById(R.id.editText);
+        reload_btn = (Button) findViewById(R.id.reload_btn);
+        clear_btn = (Button) findViewById(R.id.clear_btn);
         color1_btn = (Button) findViewById(R.id.color1_btn);
         color2_btn = (Button) findViewById(R.id.color2_btn);
         color3_btn = (Button) findViewById(R.id.color3_btn);
@@ -72,6 +76,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {}
+        });
+
+        clear_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editText.setText("");
+            }
+        });
+
+        reload_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.invalidate();
+            }
         });
 
         color1_btn.setOnClickListener(new View.OnClickListener() {
