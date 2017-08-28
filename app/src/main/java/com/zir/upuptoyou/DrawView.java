@@ -115,7 +115,7 @@ public class DrawView extends View {
                 //load image
                 //Todo: trade ram for speed by loading all bitmaps in constructor?
                 int id = 1 + (int) (Math.random() * 25);
-                Log.d("Drawpeople","id:"+Integer.toString(id));
+                //Log.d("Drawpeople","id:"+Integer.toString(id));
                 int resId;
                 if(id<10)
                     resId= getResId("p40"+Integer.toString(id), R.drawable.class);
@@ -126,7 +126,7 @@ public class DrawView extends View {
                 //set location
                 x_people += PeopleGapX;
                 y_people += PeopleGapY;
-                Log.d("drawpeople","image "+Integer.toString(i)+" : x"+ Integer.toString(x_people)+ " / y " + Integer.toString(y_people));
+                //Log.d("drawpeople","image "+Integer.toString(i)+" : x"+ Integer.toString(x_people)+ " / y " + Integer.toString(y_people));
                 person_dst = new Rect((int) (x_people * r_x), (int) (y_people * r_y), (int) ((x_people + PeopleWidth) * r_x), (int) ((y_people + PeopleHeight) * r_y));
                 canvas.drawBitmap(person, null, person_dst, null);
             } else {
@@ -136,7 +136,7 @@ public class DrawView extends View {
             }
 
         //write words
-        Log.d("drawpeople","Matrix: "+ matrix_text.toShortString()) ;
+        //Log.d("drawpeople","Matrix: "+ matrix_text.toShortString()) ;
         canvas.setMatrix(matrix_text);
         canvas.rotate(-3);
         float x_text = TextStartX;
@@ -155,12 +155,12 @@ public class DrawView extends View {
                 if ((int) c < 128) {
                     paint_text.setTextSize(FontSizeEn * r_x);
                     paint_text.setTypeface(fontEn);
-                    Log.d("drawText",c+"'s Size"+ String.valueOf(paint_text.getTextSize()));
+                    //Log.d("drawText",c+"'s Size"+ String.valueOf(paint_text.getTextSize()));
                 }
                 else {
                     paint_text.setTextSize(FontSizeZh * r_x);
                     paint_text.setTypeface(Typeface.DEFAULT_BOLD);
-                    Log.d("drawText", c + "'s Size" + String.valueOf(paint_text.getTextSize()));
+                    //Log.d("drawText", c + "'s Size" + String.valueOf(paint_text.getTextSize()));
                 }
 
 /*                switch (words.charAt(i)){             //unused since ❤ and ♥ have colors in Android

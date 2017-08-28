@@ -10,12 +10,23 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
     protected DrawView drawView;
     protected EditText editText;
+    protected Button color1_btn;
+    protected Button color2_btn;
+    protected Button color3_btn;
+    protected Button color4_btn;
+    protected Button color5_btn;
+    protected Button color6_btn;
+    protected Button color7_btn;
+    protected Button color8_btn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +34,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawView = (DrawView) findViewById(R.id.drawView);
         editText = (EditText) findViewById(R.id.editText);
+        color1_btn = (Button) findViewById(R.id.color1_btn);
+        color2_btn = (Button) findViewById(R.id.color2_btn);
+        color3_btn = (Button) findViewById(R.id.color3_btn);
+        color4_btn = (Button) findViewById(R.id.color4_btn);
+        color5_btn = (Button) findViewById(R.id.color5_btn);
+        color6_btn = (Button) findViewById(R.id.color6_btn);
+        color7_btn = (Button) findViewById(R.id.color7_btn);
+        color8_btn = (Button) findViewById(R.id.color8_btn);
+
+
         setSupportActionBar(toolbar);
+
+        //Todo: dynamically change button size
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();*/
 
                 drawView.drawPeople("draw!\n♥❤");
-                //drawView.setBackgroundColor(0xFFc1d540);
+                drawView.setBackgroundColor(0xFFc1d540);
             }
         });
 
@@ -48,6 +72,55 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {}
+        });
+
+        color1_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setBackgroundResource(R.color.color1);
+            }
+        });
+        color2_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setBackgroundResource(R.color.color2);
+            }
+        });
+        color3_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setBackgroundResource(R.color.color3);
+            }
+        });
+        color4_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setBackgroundResource(R.color.color4);
+            }
+        });
+        color5_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setBackgroundResource(R.color.color5);
+            }
+        });
+        color6_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setBackgroundResource(R.color.color6);
+            }
+        });
+        color7_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setBackgroundResource(R.color.color7);
+            }
+        });
+        color8_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setBackgroundResource(R.color.color8);
+            }
         });
 
     }
