@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
 /*                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
 
-                drawView.drawPeople("draw!\npeople");
-                drawView.setBackgroundColor(0xFFc1d540);
+                drawView.drawPeople("draw!\n♥❤");
+                //drawView.setBackgroundColor(0xFFc1d540);
             }
         });
 

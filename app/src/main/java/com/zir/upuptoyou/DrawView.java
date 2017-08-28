@@ -49,6 +49,7 @@ public class DrawView extends View {
     final float TextLinebreakX = -0.8f;
     final float TextLinebreakY = 35.5f;
 
+    Paint paint_text;
 
     Bitmap watermark_bitmap;
     Rect watermark_dst;
@@ -61,10 +62,23 @@ public class DrawView extends View {
     float r_x;
     float r_y;
 
+    Typeface fontEn;
+    Typeface fontZh;
+
     public DrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         watermark_bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.watermark);
         words="";
+        paint_text = new Paint();
+        paint_text.setColor(0xff40210f);
+        paint_text.setFakeBoldText(true);
+        paint_text.setTextAlign(Paint.Align.CENTER);
+        paint_text.setAntiAlias(true);
+
+
+        //TODO: change font before releasing to play store
+        fontEn= Typeface.createFromAsset(getContext().getAssets(), "fonts/ITC_Avant_Garde_Gothic_LT_Bold.ttf");
+        fontZh= Typeface.createFromAsset(getContext().getAssets(), "fonts/LiHei_Pro.ttf");
 
     }
 
@@ -80,18 +94,16 @@ public class DrawView extends View {
         matrix_text = new Matrix();
         matrix_text.setValues(new float[]{1.3f*r_x, -1.5f*r_x, 191*r_x, 0.6f*r_x, 1*r_y, 32*r_x, 0,0,1*r_x});
 
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-
         //watermark
         canvas.drawBitmap(watermark_bitmap, null, watermark_dst, null);
         Log.d("ondraw","canvaswidth: "+Integer.toString(canvas.getWidth()));
-
 
         //draw people
         Log.d("drawPeople", "start drawpeople");
@@ -100,7 +112,6 @@ public class DrawView extends View {
         int line = 0;
         for (int i = 0; i < words.length(); i++)
             if (words.charAt(i) != '\n') {
-
                 //load image
                 //Todo: trade ram for speed by loading all bitmaps in constructor?
                 int id = 1 + (int) (Math.random() * 25);
@@ -130,32 +141,50 @@ public class DrawView extends View {
         canvas.rotate(-3);
         float x_text = TextStartX;
         float y_text = TextStartY;
-        Paint paint_text = new Paint();
-        paint_text.setColor(Color.BLACK);
-        paint_text.setTextSize(FontSizeEn*r_x);
-        paint_text.setFakeBoldText(true);
-        paint_text.setTextAlign(Paint.Align.CENTER);
-        paint_text.setTypeface(Typeface.MONOSPACE);
         line = 0;
-        for (int i = 0; i < words.length(); i++)
-            if (words.charAt(i) != '\n') {
+        char c= (char)-1;
+        for (int i = 0; i < words.length(); i++) {
+            c = words.charAt(i);
+            if (c != '\n') {
 
-                //set location
                 x_text += TextGapX;
                 y_text += TextGapY;
-                Log.d("drawText","char " + Integer.toString(i)+" : x"+ Float.toString(x_text)+ " / y " + Float.toString(y_text));
-                canvas.drawText(String.valueOf(words.charAt(i)).toUpperCase(), x_text*r_x, y_text*r_y, paint_text);
+
+                //TODO: Add support for emoji
+
+                if ((int) c < 128) {
+                    paint_text.setTextSize(FontSizeEn * r_x);
+                    paint_text.setTypeface(fontEn);
+                    Log.d("drawText",c+"'s Size"+ String.valueOf(paint_text.getTextSize()));
+                }
+                else {
+                    paint_text.setTextSize(FontSizeZh * r_x);
+                    paint_text.setTypeface(Typeface.DEFAULT_BOLD);
+                    Log.d("drawText", c + "'s Size" + String.valueOf(paint_text.getTextSize()));
+                }
+
+/*                switch (words.charAt(i)){             //unused since ❤ and ♥ have colors in Android
+                    case '❤':
+                        paint_text.setColor(0xffd92b6d);
+                        break;
+                    case '♥':
+                        paint_text.setColor(0xffca2626);
+                        break;
+                }*/
+
+                canvas.drawText(String.valueOf(words.charAt(i)).toUpperCase(), x_text * r_x, y_text * r_y, paint_text);
+                //paint_text.setColor(0xff40210f);      //set color to default value if it's changed.
             } else {
                 line++;
                 x_text = TextStartX + line * TextLinebreakX;
                 y_text = TextStartY + line * TextLinebreakY;
             }
-
+        }
     }
 
 
     //redraw all people
-    //// TODO: refine drawing process 
+    //// TODO: refine drawing process: not all people at the same time
     public void drawPeople(String words) {
         this.words = words;
         invalidate();
