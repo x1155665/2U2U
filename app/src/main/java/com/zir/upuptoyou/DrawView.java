@@ -1,17 +1,20 @@
 package com.zir.upuptoyou;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.ColorInt;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Field;
 
@@ -28,14 +31,24 @@ public class DrawView extends View {
     final private int outputWidth = 500; //px
     final private int outputHeight = 500; //px
 
-    final int startX = 120;
-    final int startY = 40;
-    final int gapx = 50;
-    final int gapY = 22;
-    final int peopleWidth = 76;
-    final int peopleHeight = 149;
-    final int linebreakX = -52;
-    final int linebreakY = 36;
+    final int PeopleStartX = 120;
+    final int PeopleStartY = 40;
+    final int PeopleGapX = 50;
+    final int PeopleGapY = 22;
+    final int PeopleWidth = 76;
+    final int PeopleHeight = 149;
+    final int PeoplelinebreakX = -52;
+    final int PeoplelinebreakY = 36;
+
+    final float TextStartX = 4f + 26.4f; //
+    final float TextStartY = 34.5f - 6f;
+    final float TextGapX = 37.7f;
+    final float TextGapY = 1.4f;
+    final int FontSizeZh = 20;
+    final int FontSizeEn = 23;
+    final float TextLinebreakX = -0.8f;
+    final float TextLinebreakY = 35.5f;
+
 
     Bitmap watermark_bitmap;
     Rect watermark_dst;
@@ -44,12 +57,15 @@ public class DrawView extends View {
     Rect person_dst;
     String words;
 
-    Canvas canvas;
+    Matrix matrix_text;
+    float r_x;
+    float r_y;
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         watermark_bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.watermark);
         words="";
+
     }
 
     @Override
@@ -59,20 +75,28 @@ public class DrawView extends View {
         Width = this.getHeight();
         Log.d("onSizeChanged", Integer.toString(Width) + "*" + Integer.toString(Height));
         watermark_dst = new Rect((int) (10.0 / (float) outputWidth * Width), (int) (8 / (float) outputHeight * Height), (int) ((101 + 10.0) / (float) outputWidth * Width), (int) ((8.0 + 45) / (float) outputHeight * Height));
+        r_x = Width/(float)outputWidth;
+        r_y = Height/(float)outputHeight;
+        matrix_text = new Matrix();
+        matrix_text.setValues(new float[]{1.3f*r_x, -1.5f*r_x, 191*r_x, 0.6f*r_x, 1*r_y, 32*r_x, 0,0,1*r_x});
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        this.canvas=canvas;
+
+
+
         //watermark
         canvas.drawBitmap(watermark_bitmap, null, watermark_dst, null);
         Log.d("ondraw","canvaswidth: "+Integer.toString(canvas.getWidth()));
 
+
         //draw people
         Log.d("drawPeople", "start drawpeople");
-        int x = startX ;
-        int y = startY ;
+        int x_people = PeopleStartX;
+        int y_people = PeopleStartY;
         int line = 0;
         for (int i = 0; i < words.length(); i++)
             if (words.charAt(i) != '\n') {
@@ -89,18 +113,44 @@ public class DrawView extends View {
                 person = BitmapFactory.decodeResource(getResources(), resId);
 
                 //set location
-                x += gapx;
-                y += gapY;
-                Log.d("drawpeople",Integer.toString(i)+" : x"+ Integer.toString(x)+ " / y " + Integer.toString(y));
-                person_dst = new Rect((int) (x / (float) outputWidth * Width), (int) (y / (float) outputHeight * Height), (int) ((x + peopleWidth) / (float) outputWidth * Width), (int) ((y + peopleHeight) / (float) outputHeight * Height));
-
-                Log.d("Drawpeople","canvaswidth: "+Integer.toString(canvas.getWidth()));
+                x_people += PeopleGapX;
+                y_people += PeopleGapY;
+                Log.d("drawpeople","image "+Integer.toString(i)+" : x"+ Integer.toString(x_people)+ " / y " + Integer.toString(y_people));
+                person_dst = new Rect((int) (x_people * r_x), (int) (y_people * r_y), (int) ((x_people + PeopleWidth) * r_x), (int) ((y_people + PeopleHeight) * r_y));
                 canvas.drawBitmap(person, null, person_dst, null);
             } else {
                 line++;
-                x = startX + line * linebreakX;
-                y = startY + line * linebreakY;
+                x_people = PeopleStartX + line * PeoplelinebreakX;
+                y_people = PeopleStartY + line * PeoplelinebreakY;
             }
+
+        //write words
+        Log.d("drawpeople","Matrix: "+ matrix_text.toShortString()) ;
+        canvas.setMatrix(matrix_text);
+        canvas.rotate(-3);
+        float x_text = TextStartX;
+        float y_text = TextStartY;
+        Paint paint_text = new Paint();
+        paint_text.setColor(Color.BLACK);
+        paint_text.setTextSize(FontSizeEn*r_x);
+        paint_text.setFakeBoldText(true);
+        paint_text.setTextAlign(Paint.Align.CENTER);
+        paint_text.setTypeface(Typeface.MONOSPACE);
+        line = 0;
+        for (int i = 0; i < words.length(); i++)
+            if (words.charAt(i) != '\n') {
+
+                //set location
+                x_text += TextGapX;
+                y_text += TextGapY;
+                Log.d("drawText","char " + Integer.toString(i)+" : x"+ Float.toString(x_text)+ " / y " + Float.toString(y_text));
+                canvas.drawText(String.valueOf(words.charAt(i)).toUpperCase(), x_text*r_x, y_text*r_y, paint_text);
+            } else {
+                line++;
+                x_text = TextStartX + line * TextLinebreakX;
+                y_text = TextStartY + line * TextLinebreakY;
+            }
+
     }
 
 
