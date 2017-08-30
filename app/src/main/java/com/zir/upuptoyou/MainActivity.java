@@ -75,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                drawView.drawPeople(editText.getText().toString());
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+                drawView.drawPeople(editText.getText().toString());
+            }
         });
 
         clear_btn.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         reload_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                drawView.invalidate();
+                drawView.refresh();
             }
         });
 

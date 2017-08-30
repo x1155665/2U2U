@@ -71,6 +71,9 @@ public class DrawView extends View {
     protected Rect person_dst;
 
     protected String words;
+    protected String oldWords;
+
+    protected int[] picIds;
 
     protected Matrix matrix_text;
     protected float r_x;
@@ -83,6 +86,8 @@ public class DrawView extends View {
         super(context, attrs);
         watermark_bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.watermark);
         words = "";
+        oldWords = "";
+        picIds = new int[words.length()];
         paint_text = new Paint();
         paint_text.setColor(0xff40210f);
         paint_text.setFakeBoldText(true);
@@ -93,7 +98,6 @@ public class DrawView extends View {
         //TODO: change font before releasing to play store
         fontEn = Typeface.createFromAsset(getContext().getAssets(), "fonts/ITC_Avant_Garde_Gothic_LT_Bold.ttf");
         fontZh = Typeface.createFromAsset(getContext().getAssets(), "fonts/LiHei_Pro.ttf");
-
 
     }
 
@@ -109,33 +113,34 @@ public class DrawView extends View {
         matrix_text = new Matrix();
         matrix_text.setValues(new float[]{1.3f * r_x, -1.5f * r_x, 191 * r_x, 0.6f * r_x, 1 * r_y, 32 * r_x, 0, 0, 1 * r_x});
 
-
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-
+        boolean noChange = oldWords.equals(words);
 
         //watermark
         canvas.drawBitmap(watermark_bitmap, null, watermark_dst, null);
         Log.d("ondraw", "canvaswidth: " + Integer.toString(canvas.getWidth()));
 
-        //draw people
+        //region draw people
         Log.d("drawPeople", "start drawpeople");
         int x_people = PeopleStartX;
         int y_people = PeopleStartY;
         int line = 0;
+        int resId;
+        if(!noChange)
+            picIds = new int[words.length()];
         for (int i = 0; i < words.length(); i++)
             if (words.charAt(i) != '\n') {
                 //load image
                 //TODO: trade ram for speed by loading all bitmaps in constructor?
-                int id = 1 + (int) (Math.random() * 25);
-                //Log.d("Drawpeople","id:"+Integer.toString(id));
-                int resId;
-                if (id < 10)
-                    resId = getResId("p40" + Integer.toString(id), R.drawable.class);
+                if(!noChange)
+                    picIds[i] = 1 + (int) (Math.random() * 25);
+                if (picIds[i] < 10)
+                    resId = getResId("p40" + Integer.toString(picIds[i]), R.drawable.class);
                 else
-                    resId = getResId("p4" + Integer.toString(id), R.drawable.class);
+                    resId = getResId("p4" + Integer.toString(picIds[i]), R.drawable.class);
                 person = BitmapFactory.decodeResource(getResources(), resId);
 
                 //set location
@@ -149,9 +154,9 @@ public class DrawView extends View {
                 x_people = PeopleStartX + line * PeoplelinebreakX;
                 y_people = PeopleStartY + line * PeoplelinebreakY;
             }
+        //endregion
 
-        //write words
-        //Log.d("drawpeople","Matrix: "+ matrix_text.toShortString()) ;
+        //region write words
         canvas.setMatrix(matrix_text);
         canvas.rotate(-3);
         float x_text = TextStartX;
@@ -194,14 +199,24 @@ public class DrawView extends View {
                 y_text = TextStartY + line * TextLinebreakY;
             }
         }
+        //endregion
+
+        oldWords=words;
     }
 
 
+    public void refresh(){
+        for(int i = 0; i<picIds.length;i++)
+            picIds[i] = 1 + (int) (Math.random() * 25);
+        invalidate();
+    }
     //redraw all people
     //TODO: refine drawing process: not all people at the same time
-    public void drawPeople(String words) {
-        this.words = words;
-        invalidate();
+    public void drawPeople(String newWords) {
+        if(!words.equals(newWords)) {
+            this.words = newWords;
+            invalidate();
+        }
     }
 
 
@@ -219,7 +234,6 @@ public class DrawView extends View {
             String fileName = formatter.format(now);
             File file = new File(path.getAbsolutePath() + File.separator + "message_" + fileName + ".jpg");
             Toast toast = Toast.makeText(getContext(), getContext().getString(R.string.toast_file_saved) + "/" + Environment.DIRECTORY_PICTURES + "/upuptoyou/" + fileName + ".jpg", Toast.LENGTH_LONG);
-            Log.d("save", "Path:" + file.getPath() + " \nCanonicalPath: " + file.getCanonicalPath());
             toast.show();
             FileOutputStream ostream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
