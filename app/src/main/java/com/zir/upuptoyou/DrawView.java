@@ -124,6 +124,7 @@ public class DrawView extends View {
         Log.d("ondraw", "canvaswidth: " + Integer.toString(canvas.getWidth()));
 
         //region draw people
+        //// TODO: refine process. noticable lag when the words is long. 
         Log.d("drawPeople", "start drawpeople");
         int x_people = PeopleStartX;
         int y_people = PeopleStartY;
@@ -222,7 +223,7 @@ public class DrawView extends View {
 
     //TODO: choose pic size
     public void save() {
-        Bitmap bitmap = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(Width, Height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         this.draw(canvas);
         try {
@@ -233,11 +234,12 @@ public class DrawView extends View {
             Date now = new Date();
             String fileName = formatter.format(now);
             File file = new File(path.getAbsolutePath() + File.separator + "message_" + fileName + ".jpg");
-            Toast toast = Toast.makeText(getContext(), getContext().getString(R.string.toast_file_saved) + "/" + Environment.DIRECTORY_PICTURES + "/upuptoyou/" + fileName + ".jpg", Toast.LENGTH_LONG);
-            toast.show();
             FileOutputStream ostream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+            Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, true).compress(Bitmap.CompressFormat.JPEG, 75, ostream);
             ostream.close();
+
+            Toast toast = Toast.makeText(getContext(), getContext().getString(R.string.toast_file_saved) + "/" + Environment.DIRECTORY_PICTURES + "/upuptoyou/" + fileName + ".jpg", Toast.LENGTH_SHORT);
+            toast.show();
 
             // Tell the media scanner about the new file so that it is
             // immediately available to the user.
