@@ -2,11 +2,13 @@ package com.zir.upuptoyou;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -67,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 /*                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-
-                
+                Uri uriToImage = drawView.share();
+                if(uriToImage != null)
+                    share(uriToImage);
             }
         });
 
@@ -188,6 +191,11 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_REQUEST);
         } else
             drawView.save();
+    }
+
+    public  void share(Uri fileUri){
+        String title = "share to";
+        ShareCompat.IntentBuilder.from(this).setChooserTitle(title).setType("image/jpeg").setStream(fileUri).startChooser();
     }
 
     @Override

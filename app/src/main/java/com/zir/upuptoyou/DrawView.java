@@ -17,7 +17,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -255,6 +257,30 @@ public class DrawView extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Uri share(){
+        //// TODO: check cache folder size
+        Bitmap bitmap = Bitmap.createBitmap(Width, Height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        this.draw(canvas);
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.US);
+            Date now = new Date();
+            String fileName = formatter.format(now);
+            File file = new File(getContext().getCacheDir(), "message_" + fileName + ".jpg");
+            FileOutputStream ostream = new FileOutputStream(file);
+            Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, true).compress(Bitmap.CompressFormat.JPEG, 75, ostream);
+            ostream.close();
+            Log.d("sahre", "share: "+ file.getAbsolutePath());
+
+            Uri uriToImage = FileProvider.getUriForFile(getContext(), "com.zir.upuptoyou.FileProvider", file );
+            return uriToImage;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static int getResId(String variableName, Class<?> c) {
