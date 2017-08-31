@@ -33,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
     protected Button color6_btn;
     protected Button color7_btn;
     protected Button color8_btn;
+    protected Button save_btn;
 
     final int WRITE_EXTERNAL_STORAGE_REQUEST = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         color6_btn = (Button) findViewById(R.id.color6_btn);
         color7_btn = (Button) findViewById(R.id.color7_btn);
         color8_btn = (Button) findViewById(R.id.color8_btn);
-
+        save_btn = (Button) findViewById(R.id.save_btn);
 
         setSupportActionBar(toolbar);
 
@@ -66,16 +68,18 @@ public class MainActivity extends AppCompatActivity {
 /*                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
 
-                save();
+                
             }
         });
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -94,6 +98,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 drawView.refresh();
+            }
+        });
+
+        save_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                save();
             }
         });
 
@@ -170,12 +181,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void save(){
+    public void save() {
         //Permission
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if(permissionCheck!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this , new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_REQUEST);
-        }else
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_REQUEST);
+        } else
             drawView.save();
     }
 

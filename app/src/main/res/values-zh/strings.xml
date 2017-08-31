@@ -5,4 +5,5 @@
     <string name="action_settings">设置</string>
     <string name="AskPermission_Storage">抱歉，我不被允许保存文件:(</string>
     <string name="toast_file_saved">文件保存在:\n</string>
+    <string name="save">保存</string>
 </resources>

@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:background="?android:attr/detailsElementBackground"
     android:baselineAligned="false"
+    android:orientation="vertical"
     android:weightSum="1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.zir.upuptoyou.MainActivity"
-    tools:showIn="@layout/activity_main"
-    android:orientation="vertical">
+    tools:showIn="@layout/activity_main">
 
     <com.zir.upuptoyou.DrawView
         android:id="@+id/drawView"
@@ -23,13 +23,13 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/reload_btn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/reset"
@@ -46,8 +46,8 @@
 
         <Button
             android:id="@+id/clear_btn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@android:drawable/ic_delete"
@@ -65,75 +65,93 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
+            android:layout_gravity="center"
             android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
             android:text="@string/BackgroundColor"
             android:textAlignment="center"
-            android:gravity="center"
-            android:layout_gravity="center"
             android:textSize="14sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/color1_btn"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_height="16dp"
             android:layout_width="16dp"
-            android:background="@color/color1"/>
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/color1"
+            android:gravity="center" />
+
         <Button
             android:id="@+id/color2_btn"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            android:layout_height="16dp"
             android:layout_width="16dp"
-            android:background="@color/color2"/>
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/color2" />
+
         <Button
             android:id="@+id/color3_btn"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            android:layout_height="16dp"
             android:layout_width="16dp"
-            android:background="@color/color3"/>
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/color3" />
+
         <Button
             android:id="@+id/color4_btn"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            android:layout_height="16dp"
             android:layout_width="16dp"
-            android:background="@color/color4"/>
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/color4" />
+
         <Button
             android:id="@+id/color5_btn"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            android:layout_height="16dp"
             android:layout_width="16dp"
-            android:background="@color/color5"/>
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/color5" />
+
         <Button
             android:id="@+id/color6_btn"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            android:layout_height="16dp"
             android:layout_width="16dp"
-            android:background="@color/color6"/>
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/color6" />
+
         <Button
             android:id="@+id/color7_btn"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            android:layout_height="16dp"
             android:layout_width="16dp"
-            android:background="@color/color7"/>
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/color7" />
+
         <Button
             android:id="@+id/color8_btn"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            android:layout_height="16dp"
             android:layout_width="16dp"
-            android:background="@color/color8"/>
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/color8" />
 
         <!--TODO: White ?-->
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="14dp"
+        android:background="@drawable/save_btn"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:text="@string/save" />
 
 </LinearLayout>
