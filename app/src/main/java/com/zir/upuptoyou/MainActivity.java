@@ -14,12 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        deleteCache();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawView = (DrawView) findViewById(R.id.drawView);
@@ -67,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-/*                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
                 Uri uriToImage = drawView.share();
                 if(uriToImage != null)
                     share(uriToImage);
@@ -194,6 +196,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public  void share(Uri fileUri){
+        File cache = getCacheDir();
+        Log.d("share", "share: "+String.valueOf(cache.getTotalSpace()));
         String title = "share to";
         ShareCompat.IntentBuilder.from(this).setChooserTitle(title).setType("image/jpeg").setStream(fileUri).startChooser();
     }
@@ -210,6 +214,32 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return;
             }
+        }
+    }
+
+    public void deleteCache() {
+        try {
+            File dir = getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) {
+            Log.d("2u2u", "deleteCache: Error");
+        }
+    }
+
+    public boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
         }
     }
 }
