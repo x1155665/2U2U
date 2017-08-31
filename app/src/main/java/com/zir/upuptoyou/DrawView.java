@@ -55,8 +55,8 @@ public class DrawView extends View {
     final int PeoplelinebreakX = -52;
     final int PeoplelinebreakY = 36;
 
-    final float TextStartX = 4f + 26.4f; //
-    final float TextStartY = 34.5f - 6f;
+    final float TextStartX = 4f ; //
+    final float TextStartY = 34.5f;
     final float TextGapX = 37.7f;
     final float TextGapY = 1.4f;
     final int FontSizeZh = 20;
@@ -109,11 +109,11 @@ public class DrawView extends View {
         Height = this.getHeight();
         Width = this.getHeight();
         Log.d("onSizeChanged", Integer.toString(Width) + "*" + Integer.toString(Height));
-        watermark_dst = new Rect((int) (10.0 / (float) outputWidth * Width), (int) (8 / (float) outputHeight * Height), (int) ((101 + 10.0) / (float) outputWidth * Width), (int) ((8.0 + 45) / (float) outputHeight * Height));
+        //watermark_dst = new Rect((int) (10.0 / (float) outputWidth * Width), (int) (8 / (float) outputHeight * Height), (int) ((101 + 10.0) / (float) outputWidth * Width), (int) ((8.0 + 45) / (float) outputHeight * Height));
         r_x = Width / (float) outputWidth;
         r_y = Height / (float) outputHeight;
         matrix_text = new Matrix();
-        matrix_text.setValues(new float[]{1.3f * r_x, -1.5f * r_x, 191 * r_x, 0.6f * r_x, 1 * r_y, 32 * r_x, 0, 0, 1 * r_x});
+        matrix_text.setValues(new float[]{1.3f , -1.5f , 191 , 0.6f , 1 , 32 , 0, 0, 1 });
 
     }
 
@@ -121,13 +121,16 @@ public class DrawView extends View {
     protected void onDraw(Canvas canvas) {
         boolean noChange = oldWords.equals(words);
 
+        Bitmap bitmap_normal = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas_normal = new Canvas(bitmap_normal);
+        //region draw in 500*500
+
         //watermark
-        canvas.drawBitmap(watermark_bitmap, null, watermark_dst, null);
-        Log.d("ondraw", "canvaswidth: " + Integer.toString(canvas.getWidth()));
+        watermark_dst = new Rect(10, 8, (101 + 10), (8 + 45));
+        canvas_normal.drawBitmap(watermark_bitmap, null, watermark_dst, null);
 
         //region draw people
-        //// TODO: refine process. noticable lag when the words is long. 
-        Log.d("drawPeople", "start drawpeople");
+        // TODO: refine process. noticeable lag when the words is long.
         int x_people = PeopleStartX;
         int y_people = PeopleStartY;
         int line = 0;
@@ -150,8 +153,8 @@ public class DrawView extends View {
                 x_people += PeopleGapX;
                 y_people += PeopleGapY;
                 //Log.d("drawpeople","image "+Integer.toString(i)+" : x"+ Integer.toString(x_people)+ " / y " + Integer.toString(y_people));
-                person_dst = new Rect((int) (x_people * r_x), (int) (y_people * r_y), (int) ((x_people + PeopleWidth) * r_x), (int) ((y_people + PeopleHeight) * r_y));
-                canvas.drawBitmap(person, null, person_dst, null);
+                person_dst = new Rect(x_people, y_people, (x_people + PeopleWidth), (y_people + PeopleHeight));
+                canvas_normal.drawBitmap(person, null, person_dst, null);
             } else {
                 line++;
                 x_people = PeopleStartX + line * PeoplelinebreakX;
@@ -160,8 +163,8 @@ public class DrawView extends View {
         //endregion
 
         //region write words
-        canvas.setMatrix(matrix_text);
-        canvas.rotate(-3);
+        canvas_normal.setMatrix(matrix_text);
+        canvas_normal.rotate(-3);
         float x_text = TextStartX;
         float y_text = TextStartY;
         line = 0;
@@ -176,11 +179,11 @@ public class DrawView extends View {
                 //TODO: Add support for emoji
 
                 if ((int) c < 128) {
-                    paint_text.setTextSize(FontSizeEn * r_x);
+                    paint_text.setTextSize(FontSizeEn);
                     paint_text.setTypeface(fontEn);
                     //Log.d("drawText",c+"'s Size"+ String.valueOf(paint_text.getTextSize()));
                 } else {
-                    paint_text.setTextSize(FontSizeZh * r_x);
+                    paint_text.setTextSize(FontSizeZh);
                     paint_text.setTypeface(Typeface.DEFAULT_BOLD);
                     //Log.d("drawText", c + "'s Size" + String.valueOf(paint_text.getTextSize()));
                 }
@@ -194,7 +197,7 @@ public class DrawView extends View {
                         break;
                 }*/
 
-                canvas.drawText(String.valueOf(words.charAt(i)).toUpperCase(), x_text * r_x, y_text * r_y, paint_text);
+                canvas_normal.drawText(String.valueOf(words.charAt(i)).toUpperCase(), x_text , y_text , paint_text);
                 //paint_text.setColor(0xff40210f);      //set color to default value if it's changed.
             } else {
                 line++;
@@ -204,6 +207,8 @@ public class DrawView extends View {
         }
         //endregion
 
+        //endregion
+        canvas.drawBitmap(bitmap_normal, null, new Rect(0,0,Width,Height), null);
         oldWords=words;
     }
 
