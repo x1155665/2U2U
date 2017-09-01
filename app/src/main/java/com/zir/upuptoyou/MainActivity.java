@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
 
     public  void share(Uri fileUri){
         File cache = getCacheDir();
-        Log.d("share", "share: "+String.valueOf(cache.getTotalSpace()));
         String title = "share to";
         ShareCompat.IntentBuilder.from(this).setChooserTitle(title).setType("image/jpeg").setStream(fileUri).startChooser();
     }

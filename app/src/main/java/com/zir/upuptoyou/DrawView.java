@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -114,6 +115,7 @@ public class DrawView extends View {
         //watermark_dst = new Rect((int) (10.0 / (float) outputWidth * Width), (int) (8 / (float) outputHeight * Height), (int) ((101 + 10.0) / (float) outputWidth * Width), (int) ((8.0 + 45) / (float) outputHeight * Height));
         r_x = Width / (float) outputWidth;
         r_y = Height / (float) outputHeight;
+        Log.d("r_x", "onSizeChanged: "+ String.valueOf(r_x));
         matrix_text = new Matrix();
         matrix_text.setValues(new float[]{1.3f, -1.5f, 191, 0.6f, 1, 32, 0, 0, 1});
         bitmap_normal = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
@@ -232,9 +234,10 @@ public class DrawView extends View {
 
     //TODO: choose pic size
     public void save() {
-        Bitmap bitmap = Bitmap.createBitmap(Width, Height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
+        bitmap.eraseColor(((ColorDrawable)getBackground()).getColor());
         Canvas canvas = new Canvas(bitmap);
-        this.draw(canvas);
+        canvas.drawBitmap(bitmap_normal, 0 ,0 ,null);
         try {
             String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             File path = new File(root + "/upuptoyou");
@@ -267,10 +270,10 @@ public class DrawView extends View {
     }
 
     public Uri share() {
-        //// TODO: check cache folder size
-        Bitmap bitmap = Bitmap.createBitmap(Width, Height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
+        bitmap.eraseColor(((ColorDrawable)getBackground()).getColor());
         Canvas canvas = new Canvas(bitmap);
-        this.draw(canvas);
+        canvas.drawBitmap(bitmap_normal, 0 ,0 ,null);
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.US);
             Date now = new Date();
@@ -279,10 +282,8 @@ public class DrawView extends View {
             FileOutputStream ostream = new FileOutputStream(file);
             Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, true).compress(Bitmap.CompressFormat.JPEG, 75, ostream);
             ostream.close();
-            Log.d("sahre", "share: " + file.getAbsolutePath());
 
-            Uri uriToImage = FileProvider.getUriForFile(getContext(), "com.zir.upuptoyou.FileProvider", file);
-            return uriToImage;
+            return FileProvider.getUriForFile(getContext(), "com.zir.upuptoyou.FileProvider", file);
 
         } catch (Exception e) {
             e.printStackTrace();
