@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             File dir = getCacheDir();
             deleteDir(dir);
         } catch (Exception e) {
-            Log.d("2u2u", "deleteCache: Error");
+           // Log.d("2u2u", "deleteCache: Error");
         }
     }
 

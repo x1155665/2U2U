@@ -68,8 +68,6 @@ public class DrawView extends View {
 
     private Matrix matrix_text;
 
-    private final Typeface fontEn;
-    private final Typeface fontZh;
 
     private Bitmap bitmap_normal;
     private Canvas canvas_normal;
@@ -88,12 +86,11 @@ public class DrawView extends View {
         paint_text.setFakeBoldText(true);
         paint_text.setTextAlign(Paint.Align.CENTER);
         paint_text.setAntiAlias(true);
+        paint_text.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
         dstFromNormal=new Rect();
         bitmaps_people = new Bitmap[25];
 
-        //TODO: change font before releasing to play store
-        fontEn = Typeface.createFromAsset(getContext().getAssets(), "fonts/ITC_Avant_Garde_Gothic_LT_Bold.ttf");
-        fontZh = Typeface.createFromAsset(getContext().getAssets(), "fonts/LiHei_Pro.ttf");
+
 
         loadPeopleBitmap();
     }
@@ -132,7 +129,6 @@ public class DrawView extends View {
         canvas_normal.drawBitmap(watermark_bitmap, null, watermark_dst, null);
 
         //region draw people
-        // TODO: refine process. noticeable lag when the words is long.
         int x_people = PeopleStartX;
         int y_people = PeopleStartY;
         int line = 0;
@@ -140,7 +136,6 @@ public class DrawView extends View {
         for (int i = 0; i < words.length(); i++)
             if (words.charAt(i) != '\n') {
                 //load image
-                //TODO: trade ram for speed by loading all bitmaps in constructor?
                 picId = (int) (Math.random() * 25);
                 Bitmap person = bitmaps_people[picId];
 
@@ -174,10 +169,8 @@ public class DrawView extends View {
 
                 if ((int) c < 128) {
                     paint_text.setTextSize(FontSizeEn);
-                    paint_text.setTypeface(fontEn);
                 } else {
                     paint_text.setTextSize(FontSizeZh);
-                    paint_text.setTypeface(fontZh);
                 }
 
 /*                switch (words.charAt(i)){             //unused since ❤ and ♥ have colors in Android
@@ -215,7 +208,6 @@ public class DrawView extends View {
     }
 
     //redraw all people
-    //TODO: refine drawing process: not all people at the same time
     public void drawPeople(String newWords) {
         if (!words.equals(newWords)) {
             this.words = newWords;
@@ -243,7 +235,7 @@ public class DrawView extends View {
             String fileName = formatter.format(now);
             File file = new File(path.getAbsolutePath() + File.separator + "message_" + fileName + ".jpg");
             FileOutputStream ostream = new FileOutputStream(file);
-            Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, true).compress(Bitmap.CompressFormat.JPEG, 75, ostream);
+            Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, true).compress(Bitmap.CompressFormat.JPEG, 85, ostream);
             ostream.close();
 
             Toast toast = Toast.makeText(getContext(), getContext().getString(R.string.toast_file_saved) + "/" + Environment.DIRECTORY_PICTURES + "/upuptoyou/" + fileName + ".jpg", Toast.LENGTH_SHORT);

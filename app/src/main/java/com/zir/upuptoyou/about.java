@@ -10,12 +10,11 @@ import android.widget.TextView;
 
 public class about extends AppCompatActivity {
 
-    private TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        textView = (TextView) findViewById(R.id.textView_about);
+        TextView textView = (TextView) findViewById(R.id.textView_about);
         textView.setAutoLinkMask(Linkify.ALL);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         PackageManager manager = getPackageManager();
