@@ -1,8 +1,6 @@
 package com.zir.upuptoyou;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,21 +9,16 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ShareCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -111,11 +104,9 @@ public class DrawView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         Height = this.getHeight();
         Width = this.getHeight();
-        Log.d("onSizeChanged", Integer.toString(Width) + "*" + Integer.toString(Height));
         //watermark_dst = new Rect((int) (10.0 / (float) outputWidth * Width), (int) (8 / (float) outputHeight * Height), (int) ((101 + 10.0) / (float) outputWidth * Width), (int) ((8.0 + 45) / (float) outputHeight * Height));
         r_x = Width / (float) outputWidth;
         r_y = Height / (float) outputHeight;
-        Log.d("r_x", "onSizeChanged: "+ String.valueOf(r_x));
         matrix_text = new Matrix();
         matrix_text.setValues(new float[]{1.3f, -1.5f, 191, 0.6f, 1, 32, 0, 0, 1});
         bitmap_normal = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
@@ -211,7 +202,6 @@ public class DrawView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmap_normal, null, new Rect(0, 0, Width, Height), null);
-        Log.d("ondraw", "onDraw");
     }
 
 
