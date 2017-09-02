@@ -186,12 +186,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void save() {
+
         //Permission
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_REQUEST);
-        } else
+        } else {
             drawView.save();
+        }
     }
 
     public  void share(Uri fileUri){

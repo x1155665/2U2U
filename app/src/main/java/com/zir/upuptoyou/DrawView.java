@@ -63,16 +63,10 @@ public class DrawView extends View {
     private final Bitmap watermark_bitmap;
     private Rect watermark_dst;
 
-    private Bitmap person;
-    private Rect person_dst;
-
     private String words;
-    private String oldWords;
 
 
     private Matrix matrix_text;
-    private float r_x;
-    private float r_y;
 
     private final Typeface fontEn;
     private final Typeface fontZh;
@@ -80,23 +74,40 @@ public class DrawView extends View {
     private Bitmap bitmap_normal;
     private Canvas canvas_normal;
 
+    private  Bitmap[] bitmaps_people;
+
+    Rect dstFromNormal;
+
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         watermark_bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.watermark);
         words = "";
-        oldWords = "";
         paint_text = new Paint();
         paint_text.setColor(0xff40210f);
         paint_text.setFakeBoldText(true);
         paint_text.setTextAlign(Paint.Align.CENTER);
         paint_text.setAntiAlias(true);
+        dstFromNormal=new Rect();
 
 
         //TODO: change font before releasing to play store
         fontEn = Typeface.createFromAsset(getContext().getAssets(), "fonts/ITC_Avant_Garde_Gothic_LT_Bold.ttf");
         fontZh = Typeface.createFromAsset(getContext().getAssets(), "fonts/LiHei_Pro.ttf");
 
+        loadPeopleBitmap();
+    }
+
+    private void loadPeopleBitmap(){
+        bitmaps_people = new Bitmap[25];
+        int resID;
+        for(int i = 0;i<bitmaps_people.length;i++){
+            if (i < 9)
+                resID = getResId("p40" + Integer.toString(i+1), R.drawable.class);
+            else
+                resID = getResId("p4" + Integer.toString(i+1), R.drawable.class);
+            bitmaps_people[i]=BitmapFactory.decodeResource(getResources(), resID);
+        }
     }
 
     @Override
@@ -105,12 +116,12 @@ public class DrawView extends View {
         Height = this.getHeight();
         Width = this.getHeight();
         //watermark_dst = new Rect((int) (10.0 / (float) outputWidth * Width), (int) (8 / (float) outputHeight * Height), (int) ((101 + 10.0) / (float) outputWidth * Width), (int) ((8.0 + 45) / (float) outputHeight * Height));
-        r_x = Width / (float) outputWidth;
-        r_y = Height / (float) outputHeight;
         matrix_text = new Matrix();
         matrix_text.setValues(new float[]{1.3f, -1.5f, 191, 0.6f, 1, 32, 0, 0, 1});
         bitmap_normal = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
         canvas_normal = new Canvas(bitmap_normal);
+        watermark_dst = new Rect(10, 8, (101 + 10), (8 + 45));
+        dstFromNormal = new Rect(0, 0, Width, Height);
         drawNormal();
     }
 
@@ -119,7 +130,6 @@ public class DrawView extends View {
         canvas_normal.setMatrix(new Matrix());
         //region draw in 500*500
         //watermark
-        watermark_dst = new Rect(10, 8, (101 + 10), (8 + 45));
         canvas_normal.drawBitmap(watermark_bitmap, null, watermark_dst, null);
 
         //region draw people
@@ -127,23 +137,18 @@ public class DrawView extends View {
         int x_people = PeopleStartX;
         int y_people = PeopleStartY;
         int line = 0;
-        int resId;
         int picId;
         for (int i = 0; i < words.length(); i++)
             if (words.charAt(i) != '\n') {
                 //load image
                 //TODO: trade ram for speed by loading all bitmaps in constructor?
-                picId = 1 + (int) (Math.random() * 25);
-                if (picId < 10)
-                    resId = getResId("p40" + Integer.toString(picId), R.drawable.class);
-                else
-                    resId = getResId("p4" + Integer.toString(picId), R.drawable.class);
-                person = BitmapFactory.decodeResource(getResources(), resId);
+                picId = (int) (Math.random() * 25);
+                Bitmap person = bitmaps_people[picId];
 
                 //set location
                 x_people += PeopleGapX;
                 y_people += PeopleGapY;
-                person_dst = new Rect(x_people, y_people, (x_people + PeopleWidth), (y_people + PeopleHeight));
+                Rect person_dst = new Rect(x_people, y_people, (x_people + PeopleWidth), (y_people + PeopleHeight));
                 canvas_normal.drawBitmap(person, null, person_dst, null);
             } else {
                 line++;
@@ -196,12 +201,12 @@ public class DrawView extends View {
         //endregion
 
         //endregion
-        oldWords = words;
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(bitmap_normal, null, new Rect(0, 0, Width, Height), null);
+        canvas.drawBitmap(bitmap_normal, null, dstFromNormal, null);
     }
 
 
