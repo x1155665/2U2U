@@ -40,45 +40,45 @@ public class DrawView extends View {
     final private int outputWidth = 500; //px
     final private int outputHeight = 500; //px
 
-    final int PeopleStartX = 120;
-    final int PeopleStartY = 40;
-    final int PeopleGapX = 50;
-    final int PeopleGapY = 22;
-    final int PeopleWidth = 76;
-    final int PeopleHeight = 149;
-    final int PeoplelinebreakX = -52;
-    final int PeoplelinebreakY = 36;
+    private final int PeopleStartX = 120;
+    private final int PeopleStartY = 40;
+    private final int PeopleGapX = 50;
+    private final int PeopleGapY = 22;
+    private final int PeopleWidth = 76;
+    private final int PeopleHeight = 149;
+    private final int PeoplelinebreakX = -52;
+    private final int PeoplelinebreakY = 36;
 
-    final float TextStartX = 4f; //
-    final float TextStartY = 34.5f;
-    final float TextGapX = 37.7f;
-    final float TextGapY = 1.4f;
-    final int FontSizeZh = 20;
-    final int FontSizeEn = 23;
-    final float TextLinebreakX = -0.8f;
-    final float TextLinebreakY = 35.5f;
+    private final float TextStartX = 4f; //
+    private final float TextStartY = 34.5f;
+    private final float TextGapX = 37.7f;
+    private final float TextGapY = 1.4f;
+    private final int FontSizeZh = 20;
+    private final int FontSizeEn = 23;
+    private final float TextLinebreakX = -0.8f;
+    private final float TextLinebreakY = 35.5f;
 
-    Paint paint_text;
+    private Paint paint_text;
 
-    protected Bitmap watermark_bitmap;
-    protected Rect watermark_dst;
+    private final Bitmap watermark_bitmap;
+    private Rect watermark_dst;
 
-    protected Bitmap person;
-    protected Rect person_dst;
+    private Bitmap person;
+    private Rect person_dst;
 
-    protected String words;
-    protected String oldWords;
+    private String words;
+    private String oldWords;
 
 
-    protected Matrix matrix_text;
-    protected float r_x;
-    protected float r_y;
+    private Matrix matrix_text;
+    private float r_x;
+    private float r_y;
 
-    Typeface fontEn;
-    Typeface fontZh;
+    private final Typeface fontEn;
+    private final Typeface fontZh;
 
-    Bitmap bitmap_normal;
-    Canvas canvas_normal;
+    private Bitmap bitmap_normal;
+    private Canvas canvas_normal;
 
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
@@ -158,7 +158,7 @@ public class DrawView extends View {
         float x_text = TextStartX;
         float y_text = TextStartY;
         line = 0;
-        char c = (char) -1;
+        char c;
         for (int i = 0; i < words.length(); i++) {
             c = words.charAt(i);
             if (c != '\n') {
@@ -173,7 +173,7 @@ public class DrawView extends View {
                     paint_text.setTypeface(fontEn);
                 } else {
                     paint_text.setTextSize(FontSizeZh);
-                    paint_text.setTypeface(Typeface.DEFAULT_BOLD);
+                    paint_text.setTypeface(fontZh);
                 }
 
 /*                switch (words.charAt(i)){             //unused since ❤ and ♥ have colors in Android
@@ -231,7 +231,9 @@ public class DrawView extends View {
         try {
             String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             File path = new File(root + "/upuptoyou");
-            boolean createDir = path.mkdir();
+            if (!path.mkdirs()) {
+                Log.e("savePic", "Directory not created");
+            }
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.US);
             Date now = new Date();
             String fileName = formatter.format(now);

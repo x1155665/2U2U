@@ -195,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public  void share(Uri fileUri){
-        File cache = getCacheDir();
         String title = "share to";
         ShareCompat.IntentBuilder.from(this).setChooserTitle(title).setType("image/jpeg").setStream(fileUri).startChooser();
     }
@@ -227,17 +226,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
+            for (String aChildren : children) {
+                boolean success = deleteDir(new File(dir, aChildren));
                 if (!success) {
                     return false;
                 }
             }
             return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
-        }
+        } else
+            return dir != null && dir.isFile() && dir.delete();
     }
 }
