@@ -32,8 +32,9 @@
                 android:resource="@xml/file_path" />
         </provider>
 
-        <activity android:name=".about"
-            android:label="@string/about"></activity>
+        <activity
+            android:name=".about"
+            android:label="@string/about" />
     </application>
 
 </manifest>

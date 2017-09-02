@@ -89,7 +89,7 @@ public class DrawView extends View {
         paint_text.setTextAlign(Paint.Align.CENTER);
         paint_text.setAntiAlias(true);
         dstFromNormal=new Rect();
-
+        bitmaps_people = new Bitmap[25];
 
         //TODO: change font before releasing to play store
         fontEn = Typeface.createFromAsset(getContext().getAssets(), "fonts/ITC_Avant_Garde_Gothic_LT_Bold.ttf");
@@ -99,7 +99,6 @@ public class DrawView extends View {
     }
 
     private void loadPeopleBitmap(){
-        bitmaps_people = new Bitmap[25];
         int resID;
         for(int i = 0;i<bitmaps_people.length;i++){
             if (i < 9)

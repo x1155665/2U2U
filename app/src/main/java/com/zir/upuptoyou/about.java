@@ -8,8 +8,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class about extends AppCompatActivity {
 
     private TextView textView;
@@ -28,7 +26,7 @@ public class about extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        String version = info.versionName;
+        String version = info != null ? info.versionName : null;
         ((TextView) findViewById(R.id.textView_author)).setText(version+ " by zirc0");
     }
 }

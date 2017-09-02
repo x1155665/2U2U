@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         color8_btn = (Button) findViewById(R.id.color8_btn);
         save_btn = (Button) findViewById(R.id.save_btn);
 
+
         setSupportActionBar(toolbar);
 
         //Todo: dynamically change button size
