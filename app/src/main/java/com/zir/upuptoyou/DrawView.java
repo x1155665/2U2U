@@ -72,7 +72,7 @@ public class DrawView extends View {
     private Bitmap bitmap_normal;
     private Canvas canvas_normal;
 
-    private  Bitmap[] bitmaps_people;
+    private Bitmap[] bitmaps_people;
 
     Rect dstFromNormal;
 
@@ -87,22 +87,21 @@ public class DrawView extends View {
         paint_text.setTextAlign(Paint.Align.CENTER);
         paint_text.setAntiAlias(true);
         paint_text.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        dstFromNormal=new Rect();
+        dstFromNormal = new Rect();
         bitmaps_people = new Bitmap[25];
-
 
 
         loadPeopleBitmap();
     }
 
-    private void loadPeopleBitmap(){
+    private void loadPeopleBitmap() {
         int resID;
-        for(int i = 0;i<bitmaps_people.length;i++){
+        for (int i = 0; i < bitmaps_people.length; i++) {
             if (i < 9)
-                resID = getResId("p40" + Integer.toString(i+1), R.drawable.class);
+                resID = getResId("p40" + Integer.toString(i + 1), R.drawable.class);
             else
-                resID = getResId("p4" + Integer.toString(i+1), R.drawable.class);
-            bitmaps_people[i]=BitmapFactory.decodeResource(getResources(), resID);
+                resID = getResId("p4" + Integer.toString(i + 1), R.drawable.class);
+            bitmaps_people[i] = BitmapFactory.decodeResource(getResources(), resID);
         }
     }
 
@@ -142,8 +141,10 @@ public class DrawView extends View {
                 //set location
                 x_people += PeopleGapX;
                 y_people += PeopleGapY;
-                Rect person_dst = new Rect(x_people, y_people, (x_people + PeopleWidth), (y_people + PeopleHeight));
-                canvas_normal.drawBitmap(person, null, person_dst, null);
+                if (words.charAt(i) > 32) {
+                    Rect person_dst = new Rect(x_people, y_people, (x_people + PeopleWidth), (y_people + PeopleHeight));
+                    canvas_normal.drawBitmap(person, null, person_dst, null);
+                }
             } else {
                 line++;
                 x_people = PeopleStartX + line * PeoplelinebreakX;
@@ -166,12 +167,12 @@ public class DrawView extends View {
                 y_text += TextGapY;
 
                 //TODO: Add support for emoji
-
-                if ((int) c < 128) {
-                    paint_text.setTextSize(FontSizeEn);
-                } else {
-                    paint_text.setTextSize(FontSizeZh);
-                }
+                if (c > 32) {
+                    if ((int) c < 128) {
+                        paint_text.setTextSize(FontSizeEn);
+                    } else {
+                        paint_text.setTextSize(FontSizeZh);
+                    }
 
 /*                switch (words.charAt(i)){             //unused since ❤ and ♥ have colors in Android
                     case '❤':
@@ -182,8 +183,9 @@ public class DrawView extends View {
                         break;
                 }*/
 
-                canvas_normal.drawText(String.valueOf(words.charAt(i)).toUpperCase(), x_text, y_text, paint_text);
-                //paint_text.setColor(0xff40210f);      //set color to default value if it's changed.
+                    canvas_normal.drawText(String.valueOf(words.charAt(i)).toUpperCase(), x_text, y_text, paint_text);
+                    //paint_text.setColor(0xff40210f);      //set color to default value if it's changed.
+                }
             } else {
                 line++;
                 x_text = TextStartX + line * TextLinebreakX;
@@ -217,13 +219,12 @@ public class DrawView extends View {
     }
 
 
-
     //TODO: choose pic size
     public void save() {
         Bitmap bitmap = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
-        bitmap.eraseColor(((ColorDrawable)getBackground()).getColor());
+        bitmap.eraseColor(((ColorDrawable) getBackground()).getColor());
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawBitmap(bitmap_normal, 0 ,0 ,null);
+        canvas.drawBitmap(bitmap_normal, 0, 0, null);
         try {
             String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             File path = new File(root + "/upuptoyou");
@@ -259,9 +260,9 @@ public class DrawView extends View {
 
     public Uri share() {
         Bitmap bitmap = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
-        bitmap.eraseColor(((ColorDrawable)getBackground()).getColor());
+        bitmap.eraseColor(((ColorDrawable) getBackground()).getColor());
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawBitmap(bitmap_normal, 0 ,0 ,null);
+        canvas.drawBitmap(bitmap_normal, 0, 0, null);
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.US);
             Date now = new Date();
