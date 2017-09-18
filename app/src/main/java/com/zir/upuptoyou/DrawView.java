@@ -110,7 +110,6 @@ public class DrawView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         Height = this.getHeight();
         Width = this.getHeight();
-        //watermark_dst = new Rect((int) (10.0 / (float) outputWidth * Width), (int) (8 / (float) outputHeight * Height), (int) ((101 + 10.0) / (float) outputWidth * Width), (int) ((8.0 + 45) / (float) outputHeight * Height));
         matrix_text = new Matrix();
         matrix_text.setValues(new float[]{1.3f, -1.5f, 191, 0.6f, 1, 32, 0, 0, 1});
         bitmap_normal = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
