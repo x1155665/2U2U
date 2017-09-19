@@ -8,4 +8,6 @@
     <string name="save">保存</string>
     <string name="about">关于</string>
     <string name="about_text">upuptoyou.com \n 非官方应用 </string>
+    <string name="action_settings">设置</string>
+    <string name="pref_quality_label">图片质量</string>
 </resources>

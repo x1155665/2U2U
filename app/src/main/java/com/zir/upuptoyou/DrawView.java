@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
+import android.support.v7.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -219,7 +220,7 @@ public class DrawView extends View {
 
 
     //TODO: choose pic size
-    public void save() {
+    public void save(Context context) {
         Bitmap bitmap = Bitmap.createBitmap(outputWidth, outputHeight, Bitmap.Config.ARGB_8888);
         bitmap.eraseColor(((ColorDrawable) getBackground()).getColor());
         Canvas canvas = new Canvas(bitmap);
@@ -235,7 +236,8 @@ public class DrawView extends View {
             String fileName = formatter.format(now);
             File file = new File(path.getAbsolutePath() + File.separator + "message_" + fileName + ".jpg");
             FileOutputStream ostream = new FileOutputStream(file);
-            Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, true).compress(Bitmap.CompressFormat.JPEG, 85, ostream);
+            int quality = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.pref_quality_key), "85"));
+            Bitmap.createScaledBitmap(bitmap, outputWidth, outputHeight, true).compress(Bitmap.CompressFormat.JPEG, quality, ostream);
             ostream.close();
 
             Toast toast = Toast.makeText(getContext(), getContext().getString(R.string.toast_file_saved) + "/" + Environment.DIRECTORY_PICTURES + "/upuptoyou/" + fileName + ".jpg", Toast.LENGTH_SHORT);

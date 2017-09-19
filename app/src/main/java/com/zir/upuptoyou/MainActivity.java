@@ -179,8 +179,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
             startActivity(new Intent(this, about.class));
+            return true;
+        }
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
@@ -194,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_REQUEST);
         } else {
-            drawView.save();
+            drawView.save(this);
         }
     }
 
@@ -208,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case WRITE_EXTERNAL_STORAGE_REQUEST: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    drawView.save();
+                    drawView.save(this);
                 } else {
                     Toast toast = Toast.makeText(this, R.string.AskPermission_Storage, Toast.LENGTH_SHORT);
                     toast.show();
